@@ -12,4 +12,6 @@
    - Scaffold-DbContext -provider Microsoft.EntityFrameworkCore.SqlServer -connection "Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=Banking_EF6" (generates a SQL script from the DbContext, bypasses any migrations)
    
 ## Tools
-1. EF Core Power Tools: VisualStudio -> Tools -> ManageExtensions -> search by name of extension 
+1. EF Core Power Tools: 
+   - Location: VisualStudio -> Tools -> ManageExtensions -> search by name of extension
+   - Use: Right click on .csproj -> Click on EF Core Power Tools -> Chose betwwen different choices
