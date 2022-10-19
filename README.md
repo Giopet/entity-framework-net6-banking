@@ -10,3 +10,8 @@
    - update-database (makes the changes on the database - if does not exist, it will create it locally)
    - script-migration (separation of cotrols by scripting migrations - generates an .sql file)
    - Scaffold-DbContext -provider Microsoft.EntityFrameworkCore.SqlServer -connection "Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=Banking_EF6" (generates a SQL script from the DbContext, bypasses any migrations)
+   
+## Tools
+1. EF Core Power Tools: 
+   - Location: VisualStudio -> Tools -> ManageExtensions -> search by name of extension
+   - Utility: Right click on .csproj which has the dbContext -> Click on EF Core Power Tools -> Chose betwwen different functionalities
