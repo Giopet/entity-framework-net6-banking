@@ -14,4 +14,4 @@
 ## Tools
 1. EF Core Power Tools: 
    - Location: VisualStudio -> Tools -> ManageExtensions -> search by name of extension
-   - Utility: Right click on .csproj -> Click on EF Core Power Tools -> Chose betwwen different functionalities
+   - Utility: Right click on .csproj which has the dbContext -> Click on EF Core Power Tools -> Chose betwwen different functionalities
