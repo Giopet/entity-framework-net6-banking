@@ -2,7 +2,7 @@
 
 using EF6.Banking.Domain;
 using EF6.Banking.Persistence;
-
+using Microsoft.EntityFrameworkCore;
 
 BankingDbContext context = new(); //old way: private static BankingDbContext context = new BankingDbContext();
 
@@ -13,6 +13,10 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 
 /* Select Operation Methods */
 //await LoadTenantsWithSimpleSelectQuery();
+
+/* Filter Operation Methods */
+await LoadTenantsWithFilter();
+
 
 Console.WriteLine("Press Any Key for Application's Termination...");
 Console.ReadKey();
@@ -60,11 +64,31 @@ async Task AddAccountWithTenantAddedIfNotExists(Tenant tenant)
 
 async Task LoadTenantsWithSimpleSelectQuery()
 {
-    // It needs 'ToList()' to execute that query, enumerate it and send it back as objects.
-    var tenants = context.Tenants.ToList(); 
+    // It needs 'ToListAsync()' to execute that query, enumerate it and send it back as objects.
+    var tenants = await context.Tenants.ToListAsync();
 
-    // If 'ToList()' were not in the previous command, then the db connection would be remain open on the foreach loop - Expensive Operation and might create lock on table.
-    foreach(var tenant in tenants)
+    // If 'ToListAsync()' were not in the previous command, then the db connection would be remain open on the foreach loop - Expensive Operation and might create lock on table.
+    foreach (var tenant in tenants)
+    {
+        Console.WriteLine($"{tenant.Id} - {tenant.Name}");
+    }
+}
+
+async Task LoadTenantsWithFilter()
+{
+    // Parameterization is a good protection against sql injection attacks.
+    Console.Write("Enter a Tenant Name (Or Part of): ");
+    var tenantName = Console.ReadLine();
+
+    var tenantsExactMatcheByName = await context.Tenants.Where(q => q.Name.Equals(tenantName)).ToListAsync();
+    foreach (var tenant in tenantsExactMatcheByName)
+    {
+        Console.WriteLine($"{tenant.Id} - {tenant.Name}");
+    }
+
+    //var tenantsPartialMatchedByName = await context.Tenants.Where(q => q.Name.Contains(tenantName)).ToListAsync();
+    var tenantsPartialMatchedByName = await context.Tenants.Where(q => EF.Functions.Like(q.Name, $"%{tenantName}%")).ToListAsync();
+    foreach (var tenant in tenantsPartialMatchedByName)
     {
         Console.WriteLine($"{tenant.Id} - {tenant.Name}");
     }
