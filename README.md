@@ -8,11 +8,14 @@
    - ```cls``` 
      > clears the console
    - ```add-migration InitialMigration``` 
-   - > 'InitialMigration' is migration's name
-   - update-database (makes the changes on the database - if does not exist, it will create it locally)
-   - script-migration (separation of cotrols by scripting migrations - generates an .sql file)
-   - Scaffold-DbContext -provider Microsoft.EntityFrameworkCore.SqlServer -connection "Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=Banking_EF6" (generates a SQL script from the DbContext, bypasses any migrations)
-   - remove-migration (It will remove the last migration, if it is not commited on the database yet)
+     > 'InitialMigration' is migration's name
+   - ```update-database```
+     > makes the changes on the database - if does not exist, it will create it locally
+   - ```script-migration```
+     > separation of cotrols by scripting migrations - generates an .sql file
+   - ```Scaffold-DbContext -provider Microsoft.EntityFrameworkCore.SqlServer -connection "Data Source=(localdb)\MSSQLLocalDB; Initial Catalog=Banking_EF6"```        > generates a SQL script from the DbContext, bypasses any migrations
+   - ```remove-migration```
+     > It will remove the last migration, if it is not commited on the database yet
    
 ## Tools
 1. EF Core Power Tools: 
