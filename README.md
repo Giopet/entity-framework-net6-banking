@@ -17,6 +17,7 @@
      > generates a SQL script from the DbContext, bypasses any migrations
    - ```remove-migration```
      > It will remove the last migration, if it is not commited on the database yet
+4. ***Up*** means the changes are about to make, ***Down*** means the changes are undo whenever migration being rollback
    
 ## Tools
 1. EF Core Power Tools: 
