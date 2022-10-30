@@ -5,7 +5,7 @@
 2. Use as Default Project the one that has the db context
 3. Commands: 
    - ``` get-help entityframework ```
-   - cls 
+   - ```cls``` 
       > clears the console
    - add-migration InitialMigration ('InitialMigration' is migration's name)
    - update-database (makes the changes on the database - if does not exist, it will create it locally)
