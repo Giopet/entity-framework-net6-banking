@@ -42,7 +42,7 @@ Console.ReadKey();
 
 async Task AddTenant(Tenant tenant) // old way: private static
 {
-    context.Tenants.Add(tenant); // Tracked in memory until SaveChangesAsync called.
+    await context.Tenants.AddAsync(tenant); // Tracked in memory until SaveChangesAsync called.
     await context.SaveChangesAsync(); // Generates the SQL, send it into the database and rollback if anything fails.
 };
 
@@ -137,7 +137,7 @@ async Task AlternativeLinqSyntax()
 
     var tenants = await (from t in context.Tenants
                          where EF.Functions.Like(t.Name, $"%{tenantName}%") // or: t.Name.Contains()
-                         select t).ToListAsync(); // make IEnumerable fro IQuerable to have more methodss
+                         select t).ToListAsync(); // make IEnumerable from IQuerable to have more methods
 
     foreach(var tenant in tenants)
     {
@@ -194,7 +194,7 @@ async Task SimpleTenantDelete()
 }
 
 /// <summary>
-/// When we have related records delete method become a bit more sensitive.
+/// When we have related records delete method becomes a bit more sensitive.
 /// Cascade delete: if record with the primary key is removed, 
 /// then every other record that has foreign key to this one will also be deleted.
 /// For changing cascade setting: on table constraints -> ForeignKey -> onDelete -> choose ReferentialAction.
@@ -210,12 +210,12 @@ async Task DeleteTenantWithRelationship()
 /// <summary>
 /// The advantage to not tracking is that releases memory a bit more and speed up performance.
 /// If you are retrieving 1000 records with tracking, EFCore will have to monitoring all these records on one request. Imagine in more requests.
-/// Without Trackings is useful in a simple request like a readonly list. For example list data from the database to parse them as view on the user.
+/// No Tracking is useful in a simple request like a readonly list. For example list data from the database to parse them as view on the user.
 /// But if you need to make changes on that list then data must be tracking.
 /// 
 /// There are times that might be concurrency issues when have already saved some changes 
 /// and try to save them again accidentally and getting an error saying is already being tracked by EFCore.
-/// So sometimes records might be released from being tracked.
+/// So sometimes records should be released from being tracked.
 /// </summary>
 async Task TrackingVsNoTracking()
 {
