@@ -10,6 +10,10 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 //await AddTenant(new Tenant { Name = "A Bank" });
 //await AddAccountsWithTenantAddedFirst(new Tenant { Name = "B Bank" });
 //await AddAccountWithTenantAddedIfNotExists(new Tenant { Name = "C Bank" });
+//await AddAccountWithTenantId();
+//await AddTenantWithAccounts();
+//await AddTransactions();
+//await AddPerson();
 
 /* Select Operation Methods */
 //await LoadTenantsWithSimpleSelectQuery();
@@ -232,5 +236,79 @@ async Task TrackingVsNoTracking()
 
     var entriesAfterSave = context.ChangeTracker.Entries();
 }
+
+/// <summary>
+/// A scenario where tenantId and name of account sent to back-end
+/// </summary>
+async Task AddAccountWithTenantId()
+{
+    var account = new Account
+    {
+        Name = "Checking",
+        TenantId = 2,
+    };
+
+    await context.AddAsync(account); // If tenantId does not exist, will throw an exception.
+    await context.SaveChangesAsync();
+}
+
+async Task AddTenantWithAccounts()
+{
+    var accounts = new List<Account>
+    {
+        new Account
+        {
+            Name = "Checking"
+        },
+        new Account
+        {
+            Name = "Savings"
+        },
+    };
+
+    var tenant = new Tenant { Name = "I Bank" ,Accounts = accounts };
+
+    await context.AddAsync(tenant);
+    await context.SaveChangesAsync();
+}
+
+async Task AddTransactions()
+{
+    var transactions = new List<Transaction>
+    {
+        new Transaction
+        {
+            DebitAccountId = 3, CreditAccountId = 2, Date = new DateTime(2022,10,30)
+        },
+        new Transaction
+        {
+            DebitAccountId = 8, CreditAccountId = 9, Date = DateTime.Now
+        },
+        new Transaction
+        {
+            DebitAccountId = 9, CreditAccountId = 8, Date = DateTime.Now
+        }
+    };
+
+    await context.AddRangeAsync(transactions);
+    await context.SaveChangesAsync();
+}
+
+async Task AddPerson()
+{
+    var person1 = new Person { Name = "Gio Pet", AccountId = 2 };
+
+    await context.AddAsync(person1);
+
+    var person2 = new Person { Name = "Mona Lisa" }; // Doesn't have any account
+
+    await context.AddAsync(person2);
+
+    await context.SaveChangesAsync();
+}
+
+
+
+
 
 
