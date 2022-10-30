@@ -53,8 +53,13 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 //await QueryView();
 
 /* Query with Raw SQL */
-await RawSQLQuery();
+//await RawSQLQuery();
 
+/* Query Stored Procedures */
+//await ExecuteStoredProcedure();
+
+/* Raw SQL non-query Stored Procedures */
+//await ExecuteNonQueryStoredProcedure();
 
 
 
@@ -418,6 +423,27 @@ async Task RawSQLQuery()
     // Parameterizing the query, that's why we dont need to put '' on the name
     var account2 = await context.Accounts.FromSqlInterpolated($"SELECT * FROM Accounts WHERE name = {name}").ToListAsync();
 }
+
+async Task ExecuteStoredProcedure()
+{
+    var accounId = 2;
+
+    // Correct way of using FromSqlRaw() method by parsing parameters
+    var result = await context.People.FromSqlRaw("EXEC dbo.sp_GetAccountPerson {0}", accounId).ToListAsync();
+}
+
+async Task ExecuteNonQueryStoredProcedure()
+{
+    var accounId = 5;
+    var affected = await context.Database.ExecuteSqlRawAsync("EXEC dbo.sp_DeleteAccountById {0}", accounId);
+
+    //if (affected > 1) // In this way you understand if an execution was successful.
+
+    var accounId2 = 5;
+    var affected2 = await context.Database.ExecuteSqlInterpolatedAsync($"EXEC dbo.sp_DeleteAccountById {accounId}");
+}
+
+
 
 
 
