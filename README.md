@@ -18,7 +18,7 @@
    - ```remove-migration```
      > It will remove the last migration, if it is not commited on the database yet
 4. ***Up*** means the changes are about to make, ***Down*** means the changes are undo whenever migration being rollback
-      > An empty migration can be created and filled up with custom queries
+   > An empty migration can be created and filled up with custom queries
    
 ## Tools
 1. EF Core Power Tools: 
