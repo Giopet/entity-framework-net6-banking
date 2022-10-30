@@ -17,3 +17,4 @@
    - Location: VisualStudio -> Tools -> ManageExtensions -> search by name of extension
    - Utility: Right click on .csproj which has the dbContext -> Click on EF Core Power Tools -> Chose between different functionalities
 2. SQL Server Object Explorer: Visual Studio -> View -> SQL Server Object Explorer
+3. Make Diagrams using: https://app.diagrams.net/
