@@ -46,6 +46,10 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 //await AnonymousTypeProjection();
 //await StronglyTypeProjection();
 
+/* Filtering on Related Data */
+await FilteringOnRelatedData();
+
+
 
 
 Console.WriteLine("Press Any Key for Application's Termination...");
@@ -381,6 +385,13 @@ async Task StronglyTypeProjection()
         Console.WriteLine($"{nameof(Account)}: {accountDetail.Name} | {nameof(Person)}: {accountDetail.PersonName} | {nameof(Tenant)}: {accountDetail.TenanrName}");
     }
 }
+
+async Task FilteringOnRelatedData()
+{
+    // Include the accounts to view their info.
+    var tenants = await context.Tenants.Where(q => q.Accounts.Any(a => a.Name.Contains("Checking"))).ToListAsync();
+}
+
 
 
 
