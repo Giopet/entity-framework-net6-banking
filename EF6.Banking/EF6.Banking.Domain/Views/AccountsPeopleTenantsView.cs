@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EF6.Banking.Domain
 {
-    public class AccountDetail
+    public class AccountsPeopleTenantsView
     {
         public string Name { get; set; }
 

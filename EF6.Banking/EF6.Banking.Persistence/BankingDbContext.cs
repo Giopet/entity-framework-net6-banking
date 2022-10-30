@@ -29,12 +29,14 @@ namespace EF6.Banking.Persistence
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict); // Account cannot be removed if not all transactions that points are not removed as well
 
-            modelBuilder.Entity<Account>()
+            modelBuilder.Entity<Account>() //.ToTable("TableName") - if you have different name for the table on database than in class
                 .HasMany(m => m.CreditTransactions)
                 .WithOne(m => m.CreditAccount)
                 .HasForeignKey(m => m.CreditAccountId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AccountsPeopleTenantsView>().HasNoKey().ToView("AccountsPeopleTenants");
         }
 
         public DbSet<Tenant> Tenants { get; set; }
@@ -44,5 +46,7 @@ namespace EF6.Banking.Persistence
         public DbSet<Transaction> Transactions { get; set; }
 
         public DbSet<Person> People { get; set; }
+
+        public DbSet<AccountsPeopleTenantsView> AccountsPeopleTenants { get; set; }
     }
 }

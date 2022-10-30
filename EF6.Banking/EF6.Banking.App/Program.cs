@@ -49,6 +49,10 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 /* Filtering on Related Data */
 //await FilteringOnRelatedData();
 
+/* Query View */
+await QueryView();
+
+
 
 
 
@@ -376,13 +380,13 @@ async Task StronglyTypeProjection()
         {
             Name = q.Name,
             PersonName = q.Person.Name,
-            TenanrName = q.Tenant.Name
+            TenantName = q.Tenant.Name
         })
         .ToListAsync();
 
     foreach (var accountDetail in accountDetails)
     {
-        Console.WriteLine($"{nameof(Account)}: {accountDetail.Name} | {nameof(Person)}: {accountDetail.PersonName} | {nameof(Tenant)}: {accountDetail.TenanrName}");
+        Console.WriteLine($"{nameof(Account)}: {accountDetail.Name} | {nameof(Person)}: {accountDetail.PersonName} | {nameof(Tenant)}: {accountDetail.TenantName}");
     }
 }
 
@@ -391,6 +395,12 @@ async Task FilteringOnRelatedData()
     // Include the accounts to view their info.
     var tenants = await context.Tenants.Where(q => q.Accounts.Any(a => a.Name.Contains("Checking"))).ToListAsync();
 }
+
+async Task QueryView()
+{
+    var details = await context.AccountsPeopleTenants.ToListAsync();
+}
+
 
 
 
