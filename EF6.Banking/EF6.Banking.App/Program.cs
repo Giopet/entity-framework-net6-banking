@@ -50,7 +50,11 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 //await FilteringOnRelatedData();
 
 /* Query View */
-await QueryView();
+//await QueryView();
+
+/* Query with Raw SQL */
+await RawSQLQuery();
+
 
 
 
@@ -400,6 +404,21 @@ async Task QueryView()
 {
     var details = await context.AccountsPeopleTenants.ToListAsync();
 }
+
+/// <summary>
+/// If you have to parse parameters in raw sql statement, use FromSqlInterpolated() method
+/// </summary>
+async Task RawSQLQuery()
+{
+    // It must return all the properties of the returned type (*) and the names must match
+    // It passes the literal value into the query - Bad practise, Potential sql injection
+    var name = "Savings";
+    var account1 = await context.Accounts.FromSqlRaw($"SELECT * FROM Accounts WHERE name = '{name}'").ToListAsync();
+
+    // Parameterizing the query, that's why we dont need to put '' on the name
+    var account2 = await context.Accounts.FromSqlInterpolated($"SELECT * FROM Accounts WHERE name = {name}").ToListAsync();
+}
+
 
 
 
