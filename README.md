@@ -4,7 +4,7 @@
 1. To run migrations on VisualStudio you need to go to Tools ->  Nuget Package Manager -> Package Manager Console
 2. Use as Default Project the one that has the db context
 3. Commands: 
-   - get-help entityframework
+   - ``` get-help entityframework ```
    - cls 
       > clears the console
    - add-migration InitialMigration ('InitialMigration' is migration's name)
