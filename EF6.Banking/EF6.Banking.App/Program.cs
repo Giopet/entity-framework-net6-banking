@@ -47,7 +47,7 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 //await StronglyTypeProjection();
 
 /* Filtering on Related Data */
-await FilteringOnRelatedData();
+//await FilteringOnRelatedData();
 
 
 
