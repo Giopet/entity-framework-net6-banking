@@ -2,7 +2,7 @@
 
 ## EF Migration
 1. To run migrations on VisualStudio you need to go to Tools ->  Nuget Package Manager -> Package Manager Console
-2. Use as Default Project the one that has the db context
+2. On top of the Package Manager Console set as Default Project the one that has the db context
 3. Commands: 
    - ```get-help entityframework```
    - ```cls``` 
