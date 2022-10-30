@@ -16,6 +16,8 @@
         /// </summary>
         public virtual Tenant Tenant { get; set; }
 
+        public virtual Person Person { get; set; }
+
         public virtual List<Transaction> DebitTransactions { get; set; }
 
         public virtual List<Transaction> CreditTransactions { get; set; }

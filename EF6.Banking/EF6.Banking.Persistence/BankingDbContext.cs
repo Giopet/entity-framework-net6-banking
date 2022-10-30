@@ -42,5 +42,7 @@ namespace EF6.Banking.Persistence
         public DbSet<Account> Accounts { get; set; }
         
         public DbSet<Transaction> Transactions { get; set; }
+
+        public DbSet<Person> People { get; set; }
     }
 }
