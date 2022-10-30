@@ -38,6 +38,9 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 /* WithTracking vs WithoutTracking */
 //await TrackingVsNoTracking();
 
+/* Eager Loading - Including Related Data */
+//await EagerLoadingRelatedData();
+
 
 
 Console.WriteLine("Press Any Key for Application's Termination...");
@@ -307,6 +310,31 @@ async Task AddPerson()
     await context.SaveChangesAsync();
 }
 
+async Task EagerLoadingRelatedData()
+{
+    // Get many related models: Tenants -> Accounts
+    var tenants = await context.Tenants.Include(q => q.Accounts).ToListAsync();
+
+    // Get one related model: Account -> Person
+    var account = await context.Accounts.Include(q => q.Person).FirstOrDefaultAsync(q => q.Id == 2);
+
+    // Get 'Grand Children' related model: Account -> Transactions -> Debit/Credit Account
+    var accountsWithTransactions = await context.Accounts
+        .Include(q => q.DebitTransactions).ThenInclude(q => q.CreditAccount).ThenInclude(q => q.Person)
+        .Include(q => q.CreditTransactions).ThenInclude(q => q.DebitAccount).ThenInclude(q => q.Person)
+        .FirstOrDefaultAsync(q => q.Id == 2);
+
+    // Get Includes with filters
+    /// The result is not correct, it has accounts without Credit transactions. Be careful while filtering and how that is translating into sql queries.
+    var accountsWithCreditTransactions = await context.Accounts
+        .Where(q => q.CreditTransactions.Count > 0) // if you have written q.CreditTransactions.Count == null would be false because EF doesnt know anything about lists
+        .Include(q => q.Person)
+        .ToListAsync();
+
+    /// The result is correct, but not the most optimized way.
+    var accountsWithCreditTransactionsCorrect = (await context.Accounts.Include(q => q.Person).ToListAsync())
+        .Where(a => a.CreditTransactions is not null);
+}
 
 
 
