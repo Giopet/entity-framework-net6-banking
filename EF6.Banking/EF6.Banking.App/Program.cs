@@ -27,6 +27,13 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 //await SimpleUpdateTenant();
 //await SimpleUpdateAccount();
 
+/* Delete Methods */
+//await SimpleTenantDelete();
+//await DeleteTenantWithRelationship();
+
+/* WithTracking vs WithoutTracking */
+//await TrackingVsNoTracking();
+
 
 
 Console.WriteLine("Press Any Key for Application's Termination...");
@@ -177,6 +184,53 @@ async Task SimpleUpdateAccount()
     context.Accounts.Update(account);
 
     await context.SaveChangesAsync();
+}
+
+async Task SimpleTenantDelete()
+{
+    var tenant = await context.Tenants.FindAsync(2);
+    context.Tenants.Remove(tenant);
+    await context.SaveChangesAsync();
+}
+
+/// <summary>
+/// When we have related records delete method become a bit more sensitive.
+/// Cascade delete: if record with the primary key is removed, 
+/// then every other record that has foreign key to this one will also be deleted.
+/// For changing cascade setting: on table constraints -> ForeignKey -> onDelete -> choose ReferentialAction.
+/// It may be dangerous on circural references.
+/// </summary>
+async Task DeleteTenantWithRelationship()
+{
+    var tenant = await context.Tenants.FindAsync(1);
+    context.Tenants.Remove(tenant);
+    await context.SaveChangesAsync();
+}
+
+/// <summary>
+/// The advantage to not tracking is that releases memory a bit more and speed up performance.
+/// If you are retrieving 1000 records with tracking, EFCore will have to monitoring all these records on one request. Imagine in more requests.
+/// Without Trackings is useful in a simple request like a readonly list. For example list data from the database to parse them as view on the user.
+/// But if you need to make changes on that list then data must be tracking.
+/// 
+/// There are times that might be concurrency issues when have already saved some changes 
+/// and try to save them again accidentally and getting an error saying is already being tracked by EFCore.
+/// So sometimes records might be released from being tracked.
+/// </summary>
+async Task TrackingVsNoTracking()
+{
+    // We could use Find() instead of First(), but AsNoTracking() doesn't work with Find().
+    var tracking = await context.Accounts.FirstOrDefaultAsync(q => q.Id == 1);
+    var noTracking = await context.Accounts.AsNoTracking().FirstOrDefaultAsync(q => q.Id == 2); // Is not tracking in memory
+
+    tracking.Name = "E Bank";
+    noTracking.Name = "F Bank"; // It is not changed on database
+
+    var entriesBeforeSave = context.ChangeTracker.Entries();
+
+    await context.SaveChangesAsync();
+
+    var entriesAfterSave = context.ChangeTracker.Entries();
 }
 
 
