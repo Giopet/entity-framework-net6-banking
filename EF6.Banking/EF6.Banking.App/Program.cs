@@ -41,6 +41,11 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 /* Eager Loading - Including Related Data */
 //await EagerLoadingRelatedData();
 
+/* Projections to Data Transfer Objects or Anonymous Types */
+//await SelectSingleProperty();
+//await AnonymousTypeProjection();
+//await StronglyTypeProjection();
+
 
 
 Console.WriteLine("Press Any Key for Application's Termination...");
@@ -335,6 +340,48 @@ async Task EagerLoadingRelatedData()
     var accountsWithCreditTransactionsCorrect = (await context.Accounts.Include(q => q.Person).ToListAsync())
         .Where(a => a.CreditTransactions is not null);
 }
+
+async Task SelectSingleProperty()
+{
+    var accounts = await context.Accounts.Select(q => q.Name).ToListAsync();
+}
+
+async Task AnonymousTypeProjection()
+{
+    var anonymousType = await context.Accounts
+        .Include(q => q.Person)
+        .Select(q => new 
+        {
+            AccountName = q.Name, 
+            PersonName = q.Person.Name 
+        })
+        .ToListAsync();
+
+    foreach(var item in anonymousType)
+    {
+        Console.WriteLine($"{nameof(Account)}: {item.AccountName} | {nameof(Person)}: {item.PersonName}");
+    }
+}
+
+async Task StronglyTypeProjection()
+{
+    var accountDetails = await context.Accounts
+        .Include(q => q.Person)
+        .Include(q => q.Tenant)
+        .Select(q => new AccountDetail
+        {
+            Name = q.Name,
+            PersonName = q.Person.Name,
+            TenanrName = q.Tenant.Name
+        })
+        .ToListAsync();
+
+    foreach (var accountDetail in accountDetails)
+    {
+        Console.WriteLine($"{nameof(Account)}: {accountDetail.Name} | {nameof(Person)}: {accountDetail.PersonName} | {nameof(Tenant)}: {accountDetail.TenanrName}");
+    }
+}
+
 
 
 
