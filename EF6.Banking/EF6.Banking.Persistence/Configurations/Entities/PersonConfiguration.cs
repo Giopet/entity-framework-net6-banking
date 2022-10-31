@@ -13,7 +13,9 @@ namespace EF6.Banking.Persistence
     {
         public void Configure(EntityTypeBuilder<Person> builder)
         {
-            // This is equivalent to modelBuilder inside on OnModelCreating() on BankingDbContext class
+            builder.Property(p => p.Name).HasMaxLength(50);
+            builder.HasIndex(i => new { i.Name, i.AccountId }).IsUnique();
+
             builder.HasData(
                     new Person
                     {

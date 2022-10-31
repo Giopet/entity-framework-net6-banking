@@ -29,23 +29,9 @@ namespace EF6.Banking.Persistence
         {
             // We use Fluent API to define several rules, meaning that each line depends on the previous
 
-            modelBuilder.Entity<Account>()
-                .HasMany(m => m.DebitTransactions)
-                .WithOne(m => m.DebitAccount)
-                .HasForeignKey(m => m.DebitAccountId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict); // Account cannot be removed if not all transactions that points are not removed as well
-
-            modelBuilder.Entity<Account>() //.ToTable("TableName") - if you have different name for the table on database than in class
-                .HasMany(m => m.CreditTransactions)
-                .WithOne(m => m.CreditAccount)
-                .HasForeignKey(m => m.CreditAccountId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<AccountsPeopleTenantsView>().HasNoKey().ToView("AccountsPeopleTenants");
 
-            // Kepp the order depending of the level of dependency between models
+            // Keep the order depending of the level of dependency between models
             modelBuilder.ApplyConfiguration(new TenantConfiguration());
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
             modelBuilder.ApplyConfiguration(new PersonConfiguration());

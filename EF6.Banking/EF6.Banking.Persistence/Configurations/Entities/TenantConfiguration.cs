@@ -13,6 +13,9 @@ namespace EF6.Banking.Persistence
     {
         public void Configure(EntityTypeBuilder<Tenant> builder)
         {
+            builder.Property(p => p.Name).HasMaxLength(50);
+            builder.HasIndex(i => i.Name).IsUnique();
+
             builder.HasData(
                     new Tenant
                     {
