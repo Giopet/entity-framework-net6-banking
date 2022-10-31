@@ -19,7 +19,10 @@
      > It will remove the last migration, if it is not commited on the database yet
 4. ***Up*** means the changes are about to make, ***Down*** means the changes are undo whenever migration being rollback
    > An empty migration can be created and filled up with custom queries
-5. Migration cannot be removed if it is already updated on database. To revert a change on db we just need to run the previous migration of the last one we want to remove.
+5. Migration cannot be removed if it is already updated on database. To revert a change on db we just need to update the databse with the previous migration of the current one we want to remove.
+   - ```update-database '1234567890_LastMigration'```
+     > 1234567890_LastMigration is an example of migration's name
+   
    
 ## Tools
 1. EF Core Power Tools: 
