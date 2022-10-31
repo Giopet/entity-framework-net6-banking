@@ -6,10 +6,14 @@ namespace EF6.Banking.Persistence
 {
     /// <summary>
     /// Represents the connection to database
+    /// Inherits from AuditableBankingDbContext so can take all the extended functionality from this class
     /// </summary>
-    public class BankingDbContext : DbContext
+    public class BankingDbContext : AuditableBankingDbContext
     {
-        // For setting up the context
+        /// <summary>
+        /// For setting up the context
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=Banking_EF6")
@@ -17,7 +21,10 @@ namespace EF6.Banking.Persistence
                 .EnableSensitiveDataLogging(); // Everything happens in the background that probably end-user must not see.
         }
 
-        // For creation of a model or a migration
+        /// <summary>
+        /// For creation of a model or a migration
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // We use Fluent API to define several rules, meaning that each line depends on the previous

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 BankingDbContext context = new(); //old way: private static BankingDbContext context = new BankingDbContext();
 
 /* Insert Operation Methods */
-//await AddTenant(new Tenant { Name = "A Bank" });
+//await AddTenant(new Tenant { Name = "G Bank" });
 //await AddAccountsWithTenantAddedFirst(new Tenant { Name = "B Bank" });
 //await AddAccountWithTenantAddedIfNotExists(new Tenant { Name = "C Bank" });
 //await AddAccountWithTenantId();
@@ -63,8 +63,6 @@ BankingDbContext context = new(); //old way: private static BankingDbContext con
 
 
 
-
-
 Console.WriteLine("Press Any Key for Application's Termination...");
 Console.ReadKey();
 
@@ -72,7 +70,7 @@ Console.ReadKey();
 async Task AddTenant(Tenant tenant) // old way: private static
 {
     await context.Tenants.AddAsync(tenant); // Tracked in memory until SaveChangesAsync called.
-    await context.SaveChangesAsync(); // Generates the SQL, send it into the database and rollback if anything fails.
+    await context.SaveChangesAsync("Giopet"); // Generates the SQL, send it into the database and rollback if anything fails.
 };
 
 async Task AddAccountsWithTenantAddedFirst(Tenant tenant)
@@ -194,7 +192,7 @@ async Task SimpleUpdateTenant()
     tenant.Name = "AA Bank";
 
     // Save Changes
-    await context.SaveChangesAsync();
+    await context.SaveChangesAsync("Giopet");
 
     await GetModel();
 }
