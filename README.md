@@ -22,6 +22,8 @@
 5. Migration cannot be removed if it is already updated on database. To revert a change on db we just need to update the databse with the previous migration of the current one we want to remove.
    - ```update-database '1234567890_LastMigration'```
      > 1234567890_LastMigration is an example of migration's name
+   - ```remove-migration```
+     > removes the migration which hasn't updated the database
    
    
 ## Tools
