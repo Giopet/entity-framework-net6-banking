@@ -37,6 +37,12 @@ namespace EF6.Banking.Persistence
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<AccountsPeopleTenantsView>().HasNoKey().ToView("AccountsPeopleTenants");
+
+            // Kepp the order depending of the level of dependency between models
+            modelBuilder.ApplyConfiguration(new TenantConfiguration());
+            modelBuilder.ApplyConfiguration(new AccountConfiguration());
+            modelBuilder.ApplyConfiguration(new PersonConfiguration());
+
         }
 
         public DbSet<Tenant> Tenants { get; set; }
